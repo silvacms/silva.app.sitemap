@@ -5,5 +5,5 @@ from silva.core.interfaces.service import ISilvaLocalService
 
 
 class ISitemapService(ISilvaLocalService):
-	""" A Service for configuration sitemaps.
-	"""
+    """ A Service for configuration sitemaps.
+    """

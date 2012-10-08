@@ -14,15 +14,15 @@ silvaconf.extension_depends(['Silva'])
 
 
 class SilvaSitemapInstaller(DefaultInstaller):
-	""" Silva sitemap installer
-	"""
+    """ Silva sitemap installer
+    """
 
-	service_name = 'service_sitemap'
+    service_name = 'service_sitemap'
 
-	def install_custom(self, root):
-		if self.service_name not in root.objectIds():
-			factory = root.manage_addProduct['silva.app.sitemap']
-			factory.manage_addSitemapService(self.service_name)
+    def install_custom(self, root):
+        if self.service_name not in root.objectIds():
+            factory = root.manage_addProduct['silva.app.sitemap']
+            factory.manage_addSitemapService(self.service_name)
 
 
 class IExtension(Interface):
