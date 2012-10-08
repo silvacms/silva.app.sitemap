@@ -5,12 +5,14 @@ from xml.sax.saxutils import escape
 from itertools import imap, ifilter
 
 from five import grok
-from zope.component import getUtility
+from zope.component import getUtility, queryUtility
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.interface import alsoProvides
 from zope.publisher.interfaces.http import IResult
 
-from silva.core.interfaces import IRoot
+from zExceptions import NotFound
+
+from silva.core.interfaces import IContainer
 from silva.core.services.interfaces import ICatalogService
 
 from .interfaces import ISitemapService
@@ -64,12 +66,14 @@ def _utf8_encode(s):
 
 
 class SitemapView(grok.View):
-    grok.context(IRoot)
+    grok.context(IContainer)
     grok.name('sitemap.xml')
 
     def update(self):
+        sitemap = queryUtility(ISitemapService)
+        if sitemap is None:
+            raise NotFound()
         catalog = getUtility(ICatalogService)
-        sitemap = getUtility(ISitemapService)
         query = dict(
             path=map(_utf8_encode, sitemap.get_paths()),
             publication_status="public",

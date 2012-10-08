@@ -6,9 +6,21 @@ from zope.component import queryUtility
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 
+from Products.Silva.testing import FunctionalLayer as SilvaFunctionalLayer
 from silva.core.interfaces import IPublicationWorkflow
 from ..interfaces import ISitemapService
 from ..testing import FunctionalLayer
+
+
+class SitemapNotInstalled(unittest.TestCase):
+    layer = SilvaFunctionalLayer
+
+    def setUp(self):
+        self.root = self.layer.get_application()
+
+    def test_view_not_found(self):
+        with self.layer.get_browser() as browser:
+            self.assertEquals(browser.open('/root/sitemap.xml'), 404)
 
 
 class SitemapViewTestCase(unittest.TestCase):
@@ -34,8 +46,18 @@ class SitemapViewTestCase(unittest.TestCase):
         with self.layer.get_browser() as browser:
             self.assertEquals(browser.open('/root/sitemap.xml'), 200)
 
+    def test_view_on_folder(self):
+        service = queryUtility(ISitemapService)
+        service.set_trim_index(False)
+        service.set_allowed_meta_types([
+            'Mockup VersionedContent'])
+
+        with self.layer.get_browser() as browser:
+            self.assertEquals(browser.open('/root/folder/sitemap.xml'), 200)
+
 
 def test_suite():
     suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(SitemapNotInstalled))
     suite.addTest(unittest.makeSuite(SitemapViewTestCase))
     return suite
