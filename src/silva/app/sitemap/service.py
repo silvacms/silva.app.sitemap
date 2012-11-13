@@ -196,5 +196,3 @@ class SitemapRebuildForm(silvaforms.ZMISubForm):
     def rebuild(self):
         self.status = 'Index built.'
         self.context.build()
-        from pprint import pprint as pp
-        pp(self.context._excluded_contents._store)
