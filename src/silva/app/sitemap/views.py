@@ -7,7 +7,6 @@ from itertools import imap, ifilter
 from five import grok
 from zope.component import getUtility, queryUtility
 from zope.traversing.browser.absoluteurl import absoluteURL
-from zope.interface import alsoProvides
 from zope.publisher.interfaces.http import IResult
 
 from zExceptions import NotFound
@@ -70,35 +69,30 @@ class SitemapView(grok.View):
     grok.name('sitemap.xml')
 
     def update(self):
-        sitemap = queryUtility(ISitemapService)
-        if sitemap is None:
+        self.sitemap = queryUtility(ISitemapService)
+        if self.sitemap is None:
             raise NotFound()
         catalog = getUtility(ICatalogService)
         query = dict(
-            path=map(_utf8_encode, sitemap.get_paths()),
+            path=map(_utf8_encode, self.sitemap.get_paths()),
             publication_status="public",
-            meta_type=map(_utf8_encode, sitemap.get_allowed_meta_types())
+            meta_type=map(_utf8_encode, self.sitemap.get_allowed_meta_types())
         )
         brains = catalog.search(query)
-        self.trim_index = sitemap.get_trim_index()
+        self.trim_index = self.sitemap.get_trim_index()
         self.seen = set()
         self.excluded_paths = map(_normalized_path,
-            sitemap.get_excluded_paths())
+            self.sitemap.get_excluded_paths())
 
         pipe = iter(brains)
         pipe = ifilter(self.has_date, pipe)
-        if self.excluded_paths:
-            pipe = ifilter(self.exclude, pipe)
+        pipe = ifilter(self.exclude, pipe)
         pipe = imap(self.process, pipe)
         pipe = ifilter(self.dedup, pipe)
         self.pipe = pipe
 
     def exclude(self, brain):
-        path = brain.getPath()
-        for ex_path in self.excluded_paths:
-            if _normalized_path(path).startswith(ex_path):
-                return False
-        return True
+        return not self.sitemap.is_path_excluded(brain.getPath().split('/'))
 
     def has_date(self, brain):
         return brain['silva-extramodificationtime'] is not None

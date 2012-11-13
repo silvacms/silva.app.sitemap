@@ -6,8 +6,6 @@ from zope.interface import Interface
 from silva.core import conf as silvaconf
 from silva.core.conf.installer import DefaultInstaller
 
-from .interfaces import ISitemapService
-
 silvaconf.extension_name("silva.app.sitemap")
 silvaconf.extension_title("Silva Sitemaps")
 silvaconf.extension_depends(['Silva'])
