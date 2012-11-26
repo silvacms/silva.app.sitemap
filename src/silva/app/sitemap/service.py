@@ -79,7 +79,7 @@ class SitemapService(SilvaService):
         for container in walk_silva_tree(self.get_root(), requires=IContainer):
             self.index_content_access(container)
 
-    security.declareProtected('View Management Screens', 'index_object')
+    security.declareProtected('View Management Screens', 'index_content_access')
     def index_content_access(self, content):
         access = IAccessSecurity(content)
         if access.get_minimum_role() is None:
