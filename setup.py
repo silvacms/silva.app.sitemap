@@ -5,7 +5,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '3.0dev'
+version = '1.0'
 
 tests_require = [
     'Products.Silva [test]',
@@ -33,12 +33,16 @@ setup(name='silva.app.sitemap',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-        'Zope2',
         'five.grok',
-        'grokcore.chameleon',
         'setuptools',
         'silva.core.conf',
-        'silva.core.services'
+        'silva.core.interfaces',
+        'silva.core.services',
+        'zeam.form.silva',
+        'zope.component',
+        'zope.interface',
+        'zope.lifecycleevent',
+        'zope.schema',
         ],
       tests_require=tests_require,
       extras_require={'test': tests_require},
