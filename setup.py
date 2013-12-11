@@ -13,7 +13,7 @@ tests_require = [
 
 setup(name='silva.app.sitemap',
       version=version,
-      description="Sitemap xml for silva",
+      description="Generate XML Sitemaps for Silva CMS",
       long_description=open("README.txt").read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       classifiers=[
@@ -22,10 +22,10 @@ setup(name='silva.app.sitemap',
         "Programming Language :: Python",
         "Topic :: Software Development :: Libraries :: Python Modules",
         ],
-      keywords='silva sitemap',
+      keywords='silva xml sitemap',
       author='Infrae',
       author_email='info@infrae.com',
-      url='http://infrae.com/products/silva',
+      url='https://github.com/silvacms/silva.app.sitemap',
       license='BSD',
       package_dir={'': 'src'},
       packages=find_packages('src'),
